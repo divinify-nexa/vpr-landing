@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Join Virtual Properties Realty | Georgia's #1 Real Estate Company</title>
+  <!-- Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -690,7 +699,9 @@
 </footer>
 
 <script>
-  // Capture UTM parameters from URL
+  const SUPABASE_URL = 'https://uaclfvcirfludhmllnat.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhY2xmdmNpcmZsdWRobWxsbmF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDg4MDcsImV4cCI6MjA5MDEyNDgwN30.DK2AX-woDR3gGBn7l5Y5rfGkZCpclvTMtzbpgyZy2iI';
+
   function getUTMParams() {
     const params = new URLSearchParams(window.location.search);
     return {
@@ -700,7 +711,24 @@
     };
   }
 
-  function handleSubmit() {
+  async function logToSupabase(data) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/vpr_leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(data)
+      });
+    } catch(e) {
+      // silent fail — never block form submission
+    }
+  }
+
+  async function handleSubmit() {
     const firstName = document.getElementById('firstName').value.trim();
     const lastName  = document.getElementById('lastName').value.trim();
     const email     = document.getElementById('email').value.trim();
@@ -715,21 +743,35 @@
 
     const utm = getUTMParams();
 
-    // Payload — ready to POST to noCRM API or any endpoint
     const payload = {
-      first_name: firstName,
-      last_name:  lastName,
-      email:      email,
-      phone:      areaCode + phone,
-      city:       city,
-      source:     'email_campaign',
-      ...utm
+      first_name:   firstName,
+      last_name:    lastName,
+      email:        email,
+      phone:        areaCode + phone,
+      city:         city,
+      source:       'email_campaign',
+      utm_source:   utm.utm_source,
+      utm_medium:   utm.utm_medium,
+      utm_campaign: utm.utm_campaign,
+      page_url:     window.location.href
     };
 
-    console.log('Form payload:', payload);
+    // 1. Log to Supabase (silent, your private record)
+    await logToSupabase(payload);
 
-    // TODO: Replace with actual API endpoint
-    // fetch('YOUR_API_ENDPOINT', {
+    // 2. Fire GA4 conversion event
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submission', {
+        event_category: 'lead',
+        event_label: 'vpr_email_campaign',
+        first_name: firstName,
+        utm_source: utm.utm_source,
+        utm_campaign: utm.utm_campaign
+      });
+    }
+
+    // 3. TODO: POST to noCRM API endpoint (swap in once Albert provides it)
+    // await fetch('NOCRM_ENDPOINT', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(payload)
