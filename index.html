@@ -89,6 +89,22 @@
       margin-bottom: 48px;
     }
 
+
+    .vpr-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 2.5px solid rgba(255,255,255,0.85);
+      border-radius: 50%;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
     .logo-wrap img {
       width: 56px;
       height: auto;
@@ -545,7 +561,8 @@
 <section class="hero">
   <div class="hero-left">
     <div class="logo-wrap">
-      <img src="logo.png" alt="VPR" style="width:60px; height:auto; filter:invert(1); mix-blend-mode:screen;" />
+      <div class="vpr-mark">VPR</div>
+      
       <span class="logo-text">Virtual Properties Realty</span>
     </div>
     <p class="eyebrow">Georgia's #1 Real Estate Career Destination</p>
@@ -591,10 +608,7 @@
       </div>
 
       <button class="submit-btn" onclick="handleSubmit()">Request My Confidential Call →</button>
-                  <div style="text-align:center; padding: 16px 0 4px;">
-        <img src="logo.png" alt="VPR" style="width:80px; height:auto; mix-blend-mode:multiply; opacity:0.75;" />
-      </div>
-      <p class="form-note">🔒 <span>100% Confidential.</span> We never share your information.</p>
+                  <p class="form-note">🔒 <span>100% Confidential.</span> We never share your information.</p>
     </div>
 
     <div class="success-msg" id="success-msg">
