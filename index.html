@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Join Virtual Properties Realty | Georgia's #1 Real Estate Company</title>
+
   <!-- Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CLL1GRV876"></script>
   <script>
@@ -15,23 +16,24 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --green-dark: #141920;
-      --green-mid: #1e2530;
-      --green-light: #2a3345;
-      --gold: #c8a84b;
+      --green-mid:  #1e2530;
+      --green-light:#2a3345;
+      --gold:       #c8a84b;
       --gold-light: #e8c96a;
-      --accent: #4f8ef7;
-      --accent-light: #7aaeff;
-      --white: #ffffff;
-      --off-white: #f4f6f9;
-      --text-dark: #0f1318;
-      --text-mid: #3d4757;
+      --accent:     #4f8ef7;
+      --accent-dark:#3a6fd4;
+      --white:      #ffffff;
+      --off-white:  #f4f6f9;
+      --text-dark:  #0f1318;
+      --text-mid:   #3d4757;
       --text-light: #7a8699;
-      --border: #e2e7ef;
+      --border:     #e2e7ef;
     }
 
     html { scroll-behavior: smooth; }
@@ -89,13 +91,11 @@
       margin-bottom: 48px;
     }
 
-
     .vpr-mark {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       border: 2.5px solid rgba(255,255,255,0.85);
       border-radius: 50%;
       font-family: 'Playfair Display', serif;
@@ -104,11 +104,6 @@
       color: white;
       letter-spacing: 0.02em;
       flex-shrink: 0;
-    }
-    .logo-wrap img {
-      width: 56px;
-      height: auto;
-      filter: invert(1) brightness(2);
     }
 
     .logo-text {
@@ -148,8 +143,22 @@
       color: rgba(255,255,255,0.72);
       line-height: 1.7;
       max-width: 480px;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
     }
+
+    .hero-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-light);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: opacity 0.2s;
+    }
+    .hero-phone:hover { opacity: 0.8; }
+    .hero-phone svg { flex-shrink: 0; }
 
     .trust-row {
       display: flex;
@@ -191,7 +200,7 @@
       margin-bottom: 6px;
     }
 
-    .form-card p {
+    .form-card > p {
       font-size: 0.88rem;
       color: var(--text-light);
       margin-bottom: 32px;
@@ -236,16 +245,10 @@
       background: var(--white);
     }
 
-    .phone-row {
-      display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 10px;
-    }
-
     .submit-btn {
       width: 100%;
       padding: 16px;
-      background: linear-gradient(135deg, var(--accent), #3a6fd4);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: var(--white);
       border: none;
       border-radius: 10px;
@@ -264,6 +267,7 @@
     }
 
     .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
     .form-note {
       font-size: 0.75rem;
@@ -271,8 +275,22 @@
       text-align: center;
       margin-top: 14px;
     }
-
     .form-note span { color: var(--accent); }
+
+    /* ── SUCCESS STATE ── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 32px 0;
+    }
+    .success-msg .check { font-size: 3rem; margin-bottom: 16px; }
+    .success-msg h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .success-msg p { color: var(--text-light); font-size: 0.9rem; }
 
     /* ── STATS STRIP ── */
     .stats {
@@ -280,7 +298,6 @@
       padding: 48px 8%;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0;
       border-bottom: 1px solid var(--border);
     }
 
@@ -289,7 +306,6 @@
       padding: 20px;
       border-right: 1px solid var(--border);
     }
-
     .stat-item:last-child { border-right: none; }
 
     .stat-num {
@@ -306,6 +322,70 @@
       color: var(--text-light);
       text-transform: uppercase;
       letter-spacing: 0.08em;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      background: var(--white);
+      padding: 72px 8%;
+      border-top: 1px solid var(--border);
+    }
+
+    .how-it-works .section-label { color: var(--accent); margin-bottom: 12px; }
+    .how-it-works .section-title { margin-bottom: 52px; }
+
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(16.66% + 20px);
+      right: calc(16.66% + 20px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      padding: 0 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(79,142,247,0.3);
+    }
+
+    .step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      line-height: 1.6;
     }
 
     /* ── BENEFITS ── */
@@ -353,8 +433,14 @@
     }
 
     .benefit-icon {
-      font-size: 1.6rem;
-      margin-bottom: 16px;
+      width: 44px; height: 44px;
+      background: rgba(79,142,247,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: var(--accent);
     }
 
     .benefit-card h3 {
@@ -366,9 +452,69 @@
     }
 
     .benefit-card p {
-      font-size: 0.88rem;
+      font-size: 0.875rem;
       color: var(--text-light);
       line-height: 1.65;
+    }
+
+    /* ── TEAM PHOTO ── */
+    .team-photo-section {
+      position: relative;
+      overflow: hidden;
+      background: #0a0d12;
+    }
+    .team-photo-section img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      opacity: 0.88;
+    }
+    .team-photo-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(10,13,18,0.92) 0%, rgba(10,13,18,0.3) 60%, transparent 100%);
+      padding: 48px 8% 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .team-photo-label h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .team-photo-label p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .team-photo-badge {
+      background: rgba(200,168,75,0.15);
+      border: 1px solid rgba(200,168,75,0.4);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center;
+    }
+    .team-photo-badge strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .team-photo-badge span {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
     /* ── SOCIAL PROOF ── */
@@ -379,7 +525,6 @@
     }
 
     .proof .section-label { color: var(--gold); }
-
     .proof .section-title {
       color: var(--white);
       margin: 0 auto 48px;
@@ -388,51 +533,102 @@
     .awards-row {
       display: flex;
       justify-content: center;
-      gap: 40px;
+      gap: 24px;
       flex-wrap: wrap;
       margin-bottom: 52px;
     }
 
     .award-badge {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(200,168,75,0.3);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(200,168,75,0.35);
       border-radius: 12px;
       padding: 20px 28px;
       color: var(--white);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-align: center;
+      min-width: 160px;
     }
 
     .award-badge strong {
       display: block;
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--gold-light);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
     .testimonial {
-      max-width: 640px;
-      margin: 0 auto;
       background: rgba(255,255,255,0.06);
       border-radius: 16px;
-      padding: 36px 40px;
+      padding: 32px 28px;
       border: 1px solid rgba(255,255,255,0.1);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .testimonial-stars {
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
     }
 
     .testimonial p {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.85);
-      line-height: 1.7;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.75;
       font-style: italic;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      flex: 1;
     }
 
-    .testimonial cite {
-      font-size: 0.82rem;
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #0f1318;
+      flex-shrink: 0;
+    }
+
+    .author-info { text-align: left; }
+
+    .author-name {
+      font-size: 0.85rem;
+      font-weight: 500;
       color: var(--gold);
-      font-style: normal;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
+    }
+
+    .author-meta {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.38);
+      margin-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
     }
 
     /* ── BOTTOM CTA ── */
@@ -445,7 +641,7 @@
 
     .bottom-cta .section-title { margin: 0 auto 16px; }
 
-    .bottom-cta p {
+    .bottom-cta > p {
       color: var(--text-light);
       margin-bottom: 32px;
       font-size: 0.95rem;
@@ -454,13 +650,16 @@
     .cta-link {
       display: inline-block;
       padding: 16px 48px;
-      background: linear-gradient(135deg, var(--accent), #3a6fd4);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
       color: var(--white);
       border-radius: 10px;
       font-size: 1rem;
       font-weight: 500;
       text-decoration: none;
       transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
     }
 
     .cta-link:hover {
@@ -491,45 +690,14 @@
       gap: 12px;
     }
 
-    footer p {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.78rem;
-    }
-
-    footer a {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.78rem;
-      text-decoration: none;
-    }
+    footer p { color: rgba(255,255,255,0.45); font-size: 0.78rem; }
+    footer a { color: rgba(255,255,255,0.45); font-size: 0.78rem; text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.7); }
 
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── SUCCESS STATE ── */
-    .success-msg {
-      display: none;
-      text-align: center;
-      padding: 32px 0;
-    }
-
-    .success-msg .check {
-      font-size: 3rem;
-      margin-bottom: 16px;
-    }
-
-    .success-msg h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-
-    .success-msg p {
-      color: var(--text-light);
-      font-size: 0.9rem;
     }
 
     /* ── RESPONSIVE ── */
@@ -540,34 +708,41 @@
         min-height: auto;
         gap: 40px;
       }
-
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat-item:nth-child(2) { border-right: none; }
       .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
-
       .benefits-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr; gap: 32px; }
+      .steps-row::before { display: none; }
     }
 
     @media (max-width: 540px) {
       .form-card { padding: 32px 24px; }
-      .form-row { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: 1fr 1fr; }
+      .form-row  { grid-template-columns: 1fr; }
+      .stats     { grid-template-columns: 1fr 1fr; }
+      .awards-row { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <section class="hero">
   <div class="hero-left">
     <div class="logo-wrap">
       <div class="vpr-mark">VPR</div>
-      
       <span class="logo-text">Virtual Properties Realty</span>
     </div>
+
     <p class="eyebrow">Georgia's #1 Real Estate Career Destination</p>
     <h1>Build a Career<br>Worth <em>Showing Up</em><br>For.</h1>
     <p class="hero-sub">Virtual Properties Realty has been ranked the #1 real estate company for agent growth and satisfaction by the AJC and Atlanta Business Chronicle — year after year. See why thousands of agents call VPR home.</p>
+
+    <a href="tel:8883733187" class="hero-phone">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      888-373-3187 — Call or Text Anytime
+    </a>
+
     <div class="trust-row">
       <div class="trust-item"><span class="dot"></span>Top Commission Splits</div>
       <div class="trust-item"><span class="dot"></span>Unmatched Broker Support</div>
@@ -576,7 +751,7 @@
   </div>
 
   <!-- FORM -->
-  <div class="form-card">
+  <div class="form-card" id="form-card">
     <h2>Request a Confidential Call</h2>
     <p>A VPR manager will reach out within hours. All inquiries are 100% confidential.</p>
 
@@ -584,31 +759,25 @@
       <div class="form-group">
         <label>Your Name</label>
         <div class="form-row">
-          <input type="text" id="firstName" placeholder="First name" required />
-          <input type="text" id="lastName" placeholder="Last name" required />
+          <input type="text" id="firstName" placeholder="First name" required autocomplete="given-name" />
+          <input type="text" id="lastName"  placeholder="Last name"  required autocomplete="family-name" />
         </div>
       </div>
 
       <div class="form-group">
         <label>Phone Number</label>
-        <div class="phone-row">
-          <input type="text" id="areaCode" placeholder="Area code" maxlength="3" />
-          <input type="tel" id="phoneNumber" placeholder="Phone number" />
-        </div>
+        <input type="tel" id="phone" placeholder="(404) 555-0100" autocomplete="tel" />
       </div>
 
       <div class="form-group">
-        <label>E-mail</label>
-        <input type="email" id="email" placeholder="your@email.com" required />
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="your@email.com" required autocomplete="email" />
       </div>
 
-      <div class="form-group">
-        <label>Primary City</label>
-        <input type="text" id="city" placeholder="e.g. Atlanta, Duluth, Cumming..." />
-      </div>
-
-      <button class="submit-btn" onclick="handleSubmit()">Request My Confidential Call →</button>
-                  <p class="form-note">🔒 <span>100% Confidential.</span> We never share your information.</p>
+      <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">
+        Request My Confidential Call →
+      </button>
+      <p class="form-note">🔒 <span>100% Confidential.</span> We never share your information.</p>
     </div>
 
     <div class="success-msg" id="success-msg">
@@ -619,7 +788,7 @@
   </div>
 </section>
 
-<!-- STATS -->
+<!-- ═══════════════════════════════ STATS ═══════════════════════════════ -->
 <section class="stats">
   <div class="stat-item">
     <div class="stat-num">25+</div>
@@ -639,48 +808,112 @@
   </div>
 </section>
 
-<!-- BENEFITS -->
-<section class="benefits">
-  <p class="section-label">Why VPR</p>
-  <h2 class="section-title">Everything You Need to Grow Your Real Estate Career</h2>
-  <div class="benefits-grid">
-    <div class="benefit-card">
-      <div class="benefit-icon">💰</div>
-      <h3>Top Commission Splits</h3>
-      <p>Keep more of what you earn. VPR offers some of the most competitive commission structures in Georgia.</p>
+<!-- ═══════════════════════════════ HOW IT WORKS ═══════════════════════════════ -->
+<section class="how-it-works">
+  <p class="section-label">Simple Process</p>
+  <h2 class="section-title">What Happens After You Submit</h2>
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Submit Your Info</h3>
+      <p>Takes 30 seconds. We only ask for the essentials — no long applications or commitments required.</p>
     </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">📈</div>
-      <h3>Passive Residual Income</h3>
-      <p>Build wealth beyond transactions. VPR's agent income program creates earnings that work while you sleep.</p>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Reach Out</h3>
+      <p>A VPR manager calls or emails within hours for a private, no-pressure conversation about your career.</p>
     </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🎓</div>
-      <h3>World-Class Training</h3>
-      <p>From new agents to seasoned veterans, VPR's training and mentoring programs keep you ahead of the market.</p>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🛠</div>
-      <h3>Cutting-Edge Technology</h3>
-      <p>Access tools built for the modern agent — marketing, CRM, lead gen, and more — all under one roof.</p>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🤝</div>
-      <h3>Dedicated Broker Support</h3>
-      <p>You're never alone at VPR. Real support from real brokers who pick up the phone when you need them.</p>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🌎</div>
-      <h3>International Opportunities</h3>
-      <p>Expand your business beyond Georgia with VPR's international real estate involvement and network.</p>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>You Decide</h3>
+      <p>No obligation. No sales pressure. Just real answers so you can make the best decision for your career.</p>
     </div>
   </div>
 </section>
 
-<!-- SOCIAL PROOF -->
+<!-- ═══════════════════════════════ BENEFITS ═══════════════════════════════ -->
+<section class="benefits">
+  <p class="section-label">Why VPR</p>
+  <h2 class="section-title">Everything You Need to Grow Your Real Estate Career</h2>
+  <div class="benefits-grid">
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Dollar / Commission icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <h3>Top Commission Splits</h3>
+      <p>Keep more of every deal you close. VPR offers Georgia's most competitive splits and fee arrangements — designed so your income stays with you.</p>
+    </div>
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Trending up / Residual income -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <h3>Passive Residual Income</h3>
+      <p>VPR's #1-rated residual income program for Realtors lets you build earnings that keep coming in — even when you're not closing deals.</p>
+    </div>
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Graduation cap / Training -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <h3>World-Class Training</h3>
+      <p>From new agents to seasoned veterans, VPR's ongoing training calendar and mentoring programs keep you ahead of the market.</p>
+    </div>
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Headset / Broker Support -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
+      </div>
+      <h3>Dedicated Broker Support</h3>
+      <p>Nobody has more quality people serving you. Real brokers who pick up the phone — not a 1-800 number — whenever you need them.</p>
+    </div>
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Monitor / Technology -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3>Cutting-Edge Technology</h3>
+      <p>Marketing tools, CRM, lead generation, and more — all built for the modern agent. Too many money-making tools to mention.</p>
+    </div>
+
+    <div class="benefit-card">
+      <div class="benefit-icon">
+        <!-- Globe / Leads + Growth -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+      </div>
+      <h3>Agent Leads + Growth Opportunities</h3>
+      <p>VPR provides two lead programs for agents and offers branch partnership opportunities for teams looking to grow into new markets.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ TEAM PHOTO ═══════════════════════════════ -->
+<section class="team-photo-section">
+  <img src="Success_Summit_2026.jpg" alt="VPR agents and staff at the 2026 Success Summit" loading="lazy" />
+  <div class="team-photo-overlay">
+    <div class="team-photo-label">
+      <h3>This Is What #1 Looks Like.</h3>
+      <p>VPR Success Summit 2026 · Georgia's Largest Agent Community</p>
+    </div>
+    <div class="team-photo-badge">
+      <strong>1,500+</strong>
+      <span>Active Agents</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ SOCIAL PROOF ═══════════════════════════════ -->
 <section class="proof">
   <p class="section-label">Recognition</p>
   <h2 class="section-title">Recognized Year After Year</h2>
+
   <div class="awards-row">
     <div class="award-badge">
       <strong>AJC</strong>
@@ -691,41 +924,82 @@
       Top Company for Agent Growth
     </div>
     <div class="award-badge">
-      <strong>Inc. 500</strong>
-      Fastest Growing Companies
+      <strong>Real Trends 500</strong>
+      Top 500 U.S. Brokerages
+    </div>
+    <div class="award-badge">
+      <strong>Book of Lists</strong>
+      Top Georgia Real Estate Company
     </div>
   </div>
-  <div class="testimonial">
-    <p>"Virtual Properties Realty is truly one of the most impressive real estate brokerages in Georgia. Their team consistently demonstrates professionalism, integrity, and a deep understanding of the market."</p>
-    <cite>— Google Review, 5 Stars</cite>
+
+  <div class="testimonials-grid">
+
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p>"The decision to move my license from Keller Williams to Virtual Properties was the best decision ever! Not only do I get to keep the majority of the commissions I work hard for, I have access to tools, resources & tons of training classes. The agents are super helpful! I also love the Ambassador Program. Highly recommended!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">N</div>
+        <div class="author-info">
+          <div class="author-name">Natasha B.</div>
+          <div class="author-meta">Google Local Guide · 29 reviews</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p>"Having been with two other realty companies before, I can truly appreciate the difference. At those places, brokers wouldn't respond in days. With VPR, I'm confident in my ability to serve clients effectively, knowing that I have their unwavering support behind me."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">T</div>
+        <div class="author-info">
+          <div class="author-name">Tianjiao Karnes</div>
+          <div class="author-meta">Google Review · 5 Stars</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-stars">★★★★★</div>
+      <p>"I have been a Realtor for 28 years and have found my work home with Virtual Properties Realty. Whether you are a new agent or an experienced one like me, this is a great spot to land and grow in the business. Great place to call home!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">C</div>
+        <div class="author-info">
+          <div class="author-name">Cindy OGuin</div>
+          <div class="author-meta">Google Review · 5 Stars</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- BOTTOM CTA -->
+<!-- ═══════════════════════════════ BOTTOM CTA ═══════════════════════════════ -->
 <section class="bottom-cta">
   <p class="section-label">Ready to Make a Move?</p>
   <h2 class="section-title">Your next chapter starts with one conversation.</h2>
   <p>Confidential. No pressure. Just a real conversation about your career.</p>
-  <a href="#" class="cta-link" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Request My Confidential Call →</a>
+  <button class="cta-link" onclick="scrollToForm()">Request My Confidential Call →</button>
   <p class="phone-line">Or call us now: <a href="tel:8883733187">888-373-3187</a></p>
 </section>
 
-<!-- FOOTER -->
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
 <footer>
-  <p>© 2026 Virtual Properties Realty. All rights reserved.</p>
-  <a href="https://vprsuccess.com">virtualpropertiesrealty.com</a>
+  <p>© 2025 Virtual Properties Realty. All rights reserved.</p>
+  <a href="https://www.virtualpropertiesrealty.com" target="_blank" rel="noopener">virtualpropertiesrealty.com</a>
 </footer>
 
+<!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════════ -->
 <script>
-  const SUPABASE_URL = 'https://uaclfvcirfludhmllnat.supabase.co';
+  const SUPABASE_URL      = 'https://uaclfvcirfludhmllnat.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhY2xmdmNpcmZsdWRobWxsbmF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDg4MDcsImV4cCI6MjA5MDEyNDgwN30.DK2AX-woDR3gGBn7l5Y5rfGkZCpclvTMtzbpgyZy2iI';
 
   function getUTMParams() {
-    const params = new URLSearchParams(window.location.search);
+    const p = new URLSearchParams(window.location.search);
     return {
-      utm_source:   params.get('utm_source')   || '',
-      utm_medium:   params.get('utm_medium')   || '',
-      utm_campaign: params.get('utm_campaign') || '',
+      utm_source:   p.get('utm_source')   || '',
+      utm_medium:   p.get('utm_medium')   || '',
+      utm_campaign: p.get('utm_campaign') || '',
     };
   }
 
@@ -735,9 +1009,9 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
+          'apikey':        SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Prefer': 'return=minimal'
+          'Prefer':        'return=minimal'
         },
         body: JSON.stringify(data)
       });
@@ -746,18 +1020,25 @@
     }
   }
 
+  function scrollToForm() {
+    document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => document.getElementById('firstName').focus(), 600);
+  }
+
   async function handleSubmit() {
     const firstName = document.getElementById('firstName').value.trim();
     const lastName  = document.getElementById('lastName').value.trim();
     const email     = document.getElementById('email').value.trim();
-    const areaCode  = document.getElementById('areaCode').value.trim();
-    const phone     = document.getElementById('phoneNumber').value.trim();
-    const city      = document.getElementById('city').value.trim();
+    const phone     = document.getElementById('phone').value.trim();
 
     if (!firstName || !email) {
       alert('Please fill in your name and email.');
       return;
     }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting…';
 
     const utm = getUTMParams();
 
@@ -765,8 +1046,7 @@
       first_name:   firstName,
       last_name:    lastName,
       email:        email,
-      phone:        areaCode + phone,
-      city:         city,
+      phone:        phone,
       source:       'email_campaign',
       utm_source:   utm.utm_source,
       utm_medium:   utm.utm_medium,
@@ -774,28 +1054,24 @@
       page_url:     window.location.href
     };
 
-    // 1. Log to Supabase (silent, your private record)
+    // 1. Log to Supabase
     await logToSupabase(payload);
 
     // 2. Fire GA4 conversion event
     if (typeof gtag !== 'undefined') {
       gtag('event', 'form_submission', {
         event_category: 'lead',
-        event_label: 'vpr_email_campaign',
-        first_name: firstName,
-        utm_source: utm.utm_source,
-        utm_campaign: utm.utm_campaign
+        event_label:    'vpr_email_campaign',
+        first_name:     firstName,
+        utm_source:     utm.utm_source,
+        utm_campaign:   utm.utm_campaign
       });
     }
 
-    // 3. TODO: POST to noCRM API endpoint (swap in once Albert provides it)
-    // await fetch('NOCRM_ENDPOINT', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(payload)
-    // });
+    // 3. TODO: POST to noCRM API endpoint once Albert provides credentials
+    // await fetch('NOCRM_ENDPOINT', { method:'POST', headers:{...}, body: JSON.stringify(payload) });
 
-    // Show success state
+    // Show success
     document.getElementById('form-fields').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
   }
