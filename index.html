@@ -925,6 +925,26 @@
 
       .logo-wrap { margin-bottom: 24px; }
     }
+
+    .mobile-nudge {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .mobile-nudge {
+        display: block;
+        margin-top: 28px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.75);
+        animation: pulse 2s ease-in-out infinite;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -950,6 +970,9 @@
       <div class="trust-item"><span class="dot"></span>Unmatched Broker Support</div>
       <div class="trust-item"><span class="dot"></span>25+ Georgia Locations</div>
     </div>
+
+    <!-- Mobile scroll nudge -->
+    <p class="mobile-nudge">👇 Scroll down to request your free confidential call</p>
   </div>
 
   <!-- SCROLL INDICATOR (mobile only) -->
