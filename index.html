@@ -264,16 +264,82 @@
     .success-msg {
       display: none;
       text-align: center;
-      padding: 32px 0;
+      padding: 24px 8px;
     }
-    .success-msg .check { font-size: 3rem; margin-bottom: 16px; }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(39,174,96,0.3);
+      animation: successPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    .success-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: white;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @keyframes successPop {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
     .success-msg h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--accent);
-      margin-bottom: 8px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      animation: fadeUp 0.4s 0.2s ease both;
     }
-    .success-msg p { color: var(--text-light); font-size: 0.9rem; }
+
+    .success-msg p {
+      color: var(--text-light);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      max-width: 280px;
+      margin: 0 auto 20px;
+      animation: fadeUp 0.4s 0.3s ease both;
+    }
+
+    .success-divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      border-radius: 2px;
+      margin: 0 auto 20px;
+      animation: fadeUp 0.4s 0.35s ease both;
+    }
+
+    .success-detail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      animation: fadeUp 0.4s 0.4s ease both;
+    }
+
+    .success-detail svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
 
     /* ── STATS STRIP ── */
     .stats {
@@ -1036,9 +1102,16 @@
     </div>
 
     <div class="success-msg" id="success-msg">
-      <div class="check">✅</div>
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
       <h3>You're on your way.</h3>
+      <div class="success-divider"></div>
       <p>A VPR manager will be in touch within hours. Check your email for confirmation.</p>
+      <div class="success-detail">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        100% Confidential
+      </div>
     </div>
   </div>
 </section>
