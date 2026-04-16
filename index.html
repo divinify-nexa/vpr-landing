@@ -881,6 +881,50 @@
       .plan-pills { flex-direction: column; }
     }
 
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .scroll-indicator span {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .scroll-chevron {
+      width: 28px;
+      height: 28px;
+      border-right: 2px solid rgba(255,255,255,0.35);
+      border-bottom: 2px solid rgba(255,255,255,0.35);
+      transform: rotate(45deg);
+      animation: bounceDown 1.6s ease-in-out infinite;
+      margin-top: -6px;
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.4; }
+      50%       { transform: rotate(45deg) translateY(6px); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .scroll-indicator { display: flex; }
+
+      .vpr-logo-img { height: 90px; }
+
+      .logo-wrap { margin-bottom: 24px; }
+    }
   </style>
 </head>
 <body>
@@ -906,6 +950,12 @@
       <div class="trust-item"><span class="dot"></span>Unmatched Broker Support</div>
       <div class="trust-item"><span class="dot"></span>25+ Georgia Locations</div>
     </div>
+  </div>
+
+  <!-- SCROLL INDICATOR (mobile only) -->
+  <div class="scroll-indicator" onclick="document.getElementById('form-card').scrollIntoView({behavior:'smooth',block:'start'})">
+    <span>See the Form</span>
+    <div class="scroll-chevron"></div>
   </div>
 
   <!-- FORM -->
