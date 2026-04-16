@@ -722,6 +722,182 @@
       .stats     { grid-template-columns: 1fr 1fr; }
       .awards-row { flex-direction: column; align-items: center; }
     }
+
+    /* ── COMMISSION MATH ── */
+    .commission {
+      background: var(--off-white);
+      padding: 80px 8%;
+      border-top: 1px solid var(--border);
+    }
+
+    .commission-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .commission-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .commission-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.1;
+    }
+
+    .commission-headline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .commission-sub {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    .math-table {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    }
+
+    .math-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: var(--text-dark);
+      padding: 16px 28px;
+    }
+
+    .math-header span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .math-header span:last-child {
+      color: var(--gold-light);
+    }
+
+    .math-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      transition: background 0.15s;
+    }
+
+    .math-row:last-child { border-bottom: none; }
+    .math-row:hover { background: var(--off-white); }
+
+    .math-row .label {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+    }
+
+    .math-row .typical {
+      font-size: 0.95rem;
+      color: var(--text-light);
+    }
+
+    .math-row .vpr {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .math-row.highlight {
+      background: rgba(79,142,247,0.04);
+    }
+
+    .math-row.highlight .label {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    .math-row.highlight .typical {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #c0392b;
+    }
+
+    .math-row.highlight .vpr {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #27ae60;
+    }
+
+    .math-footer {
+      background: rgba(79,142,247,0.06);
+      border-top: 2px solid var(--accent);
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .math-footer p {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    .math-footer a {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .math-footer a:hover { text-decoration: underline; }
+
+    .plan-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .plan-pill {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      text-align: center;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .plan-pill strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      margin-bottom: 3px;
+    }
+
+    @media (max-width: 760px) {
+      .commission-header { grid-template-columns: 1fr; gap: 24px; }
+      .math-header, .math-row { grid-template-columns: 1fr 1fr 1fr; padding: 14px 16px; }
+      .plan-pills { flex-direction: column; }
+    }
+
   </style>
 </head>
 <body>
@@ -736,11 +912,11 @@
 
     <p class="eyebrow">Georgia's #1 Real Estate Career Destination</p>
     <h1>Build a Career<br>Worth <em>Showing Up</em><br>For.</h1>
-    <p class="hero-sub">Virtual Properties Realty has been ranked the #1 real estate company for agent growth and satisfaction by the AJC and Atlanta Business Chronicle — year after year. See why thousands of agents call VPR home.</p>
+    <p class="hero-sub">Virtual Properties Realty has been ranked the #1 real estate company for agent growth and satisfaction by the AJC and Atlanta Business Chronicle, year after year. Find out why 5,000+ agents chose VPR.</p>
 
     <a href="tel:8883733187" class="hero-phone">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-      888-373-3187 — Call or Text Anytime
+      888-373-3187 · Call or Text Anytime
     </a>
 
     <div class="trust-row">
@@ -816,7 +992,7 @@
     <div class="step">
       <div class="step-num">1</div>
       <h3>Submit Your Info</h3>
-      <p>Takes 30 seconds. We only ask for the essentials — no long applications or commitments required.</p>
+      <p>Takes 30 seconds. We only ask for the essentials. No applications or commitments required.</p>
     </div>
     <div class="step">
       <div class="step-num">2</div>
@@ -828,6 +1004,67 @@
       <h3>You Decide</h3>
       <p>No obligation. No sales pressure. Just real answers so you can make the best decision for your career.</p>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ COMMISSION MATH ═══════════════════════════════ -->
+<section class="commission">
+  <div class="commission-inner">
+
+    <div class="commission-header">
+      <div>
+        <p class="section-label">The Math Doesn't Lie</p>
+        <h2 class="commission-headline">Keep <em>90–100%</em><br>of Every Commission<br>You Earn.</h2>
+      </div>
+      <p class="commission-sub">Most brokerages take 30–50% of every commission check you work hard to earn. At VPR, you choose a plan that keeps the majority, or all, of your earnings. See what that difference looks like on a real transaction.</p>
+    </div>
+
+    <div class="math-table">
+      <div class="math-header">
+        <span>On a $400K Sale (3% Commission)</span>
+        <span>Typical 70/30 Brokerage</span>
+        <span>VPR (Plan 2 · $0/month)</span>
+      </div>
+      <div class="math-row">
+        <div class="label">Gross Commission</div>
+        <div class="typical">$12,000</div>
+        <div class="vpr">$12,000</div>
+      </div>
+      <div class="math-row">
+        <div class="label">Brokerage Split</div>
+        <div class="typical">30% = $3,600</div>
+        <div class="vpr">10% = $1,200</div>
+      </div>
+      <div class="math-row highlight">
+        <div class="label">You Keep</div>
+        <div class="typical">$8,400</div>
+        <div class="vpr">$10,800</div>
+      </div>
+      <div class="math-footer">
+        <p>*Based on VPR Plan 2 (90% split, $5,900 residential CAP, $0/month). After CAP is reached, you keep 100%. Plans vary. Ask your VPR manager for details.</p>
+        <a href="#form-card" onclick="document.getElementById('form-card').scrollIntoView({behavior:'smooth',block:'center'});return false;">See All Plans →</a>
+      </div>
+    </div>
+
+    <div class="plan-pills">
+      <div class="plan-pill">
+        <strong>100% Split</strong>
+        Flat $295/month · Unlimited transactions
+      </div>
+      <div class="plan-pill">
+        <strong>90% → 100%</strong>
+        $0/month · After $5,900 CAP
+      </div>
+      <div class="plan-pill">
+        <strong>100% Split</strong>
+        $200/transaction · $49/month
+      </div>
+      <div class="plan-pill">
+        <strong>Team Plans</strong>
+        Available · Ask for details
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -843,7 +1080,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       </div>
       <h3>Top Commission Splits</h3>
-      <p>Keep more of every deal you close. VPR offers Georgia's most competitive splits and fee arrangements — designed so your income stays with you.</p>
+      <p>Keep more of every deal you close. VPR offers Georgia's most competitive splits and fee arrangements. Your income stays with you.</p>
     </div>
 
     <div class="benefit-card">
@@ -852,7 +1089,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
       </div>
       <h3>Passive Residual Income</h3>
-      <p>VPR's #1-rated residual income program for Realtors lets you build earnings that keep coming in — even when you're not closing deals.</p>
+      <p>VPR's #1-rated residual income program pays you when agents you refer close deals. Income that doesn't stop when you do.</p>
     </div>
 
     <div class="benefit-card">
@@ -860,8 +1097,8 @@
         <!-- Graduation cap / Training -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
       </div>
-      <h3>World-Class Training</h3>
-      <p>From new agents to seasoned veterans, VPR's ongoing training calendar and mentoring programs keep you ahead of the market.</p>
+      <h3>Training That Actually Helps</h3>
+      <p>From new agents to seasoned veterans, VPR's training calendar and mentoring programs give you the skills to out-earn and outlast the competition.</p>
     </div>
 
     <div class="benefit-card">
@@ -870,7 +1107,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
       </div>
       <h3>Dedicated Broker Support</h3>
-      <p>Nobody has more quality people serving you. Real brokers who pick up the phone — not a 1-800 number — whenever you need them.</p>
+      <p>Nobody has more quality people serving you. Real brokers who pick up the phone. Not a 1-800 number. Not a ticket system. Actual people.</p>
     </div>
 
     <div class="benefit-card">
@@ -878,8 +1115,8 @@
         <!-- Monitor / Technology -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       </div>
-      <h3>Cutting-Edge Technology</h3>
-      <p>Marketing tools, CRM, lead generation, and more — all built for the modern agent. Too many money-making tools to mention.</p>
+      <h3>Tools Built for Agents</h3>
+      <p>CRM, lead generation, marketing tools, IDX website and more. Everything you need to run your business from day one.</p>
     </div>
 
     <div class="benefit-card">
@@ -903,7 +1140,7 @@
       <p>VPR Success Summit 2026 · Georgia's Largest Agent Community</p>
     </div>
     <div class="team-photo-badge">
-      <strong>1,500+</strong>
+      <strong>5,000+</strong>
       <span>Active Agents</span>
     </div>
   </div>
@@ -977,8 +1214,8 @@
 <!-- ═══════════════════════════════ BOTTOM CTA ═══════════════════════════════ -->
 <section class="bottom-cta">
   <p class="section-label">Ready to Make a Move?</p>
-  <h2 class="section-title">Your next chapter starts with one conversation.</h2>
-  <p>Confidential. No pressure. Just a real conversation about your career.</p>
+  <h2 class="section-title">One conversation could change your career.</h2>
+  <p>Confidential. No obligation. We answer your questions and let you decide.</p>
   <button class="cta-link" onclick="scrollToForm()">Request My Confidential Call →</button>
   <p class="phone-line">Or call us now: <a href="tel:8883733187">888-373-3187</a></p>
 </section>
