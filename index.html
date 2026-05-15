@@ -14,6 +14,138 @@
     gtag('config', 'G-CLL1GRV876');
   </script>
 
+  <!-- Divinify Telemetry — captures session even if main pipeline fails -->
+  <script>
+  (function() {
+    const SUPABASE_URL = 'https://uaclfvcirfludhmllnat.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhY2xmdmNpcmZsdWRobWxsbmF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDg4MDcsImV4cCI6MjA5MDEyNDgwN30.DK2AX-woDR3gGBn7l5Y5rfGkZCpclvTMtzbpgyZy2iI';
+    const CLIENT_SLUG = 'vpr';
+    const PAGE_NAME = 'vpr-benefits-landing';
+
+    const sessionId = (crypto.randomUUID && crypto.randomUUID()) ||
+                      'sess-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    const startTime = Date.now();
+    let formData = {};
+    let fieldHistory = [];
+    let scrollMaxPct = 0;
+    let clickCount = 0;
+    let focusEvents = 0;
+    let blurEvents = 0;
+    let saveTimer;
+    let initialized = false;
+
+    const headers = {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'Content-Type': 'application/json'
+    };
+
+    fetch(SUPABASE_URL + '/rest/v1/lead_sessions', {
+      method: 'POST',
+      headers: Object.assign({}, headers, { 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({
+        session_id: sessionId,
+        client_slug: CLIENT_SLUG,
+        page_name: PAGE_NAME,
+        page_url: window.location.href,
+        user_agent: navigator.userAgent,
+        referrer: document.referrer || null
+      })
+    }).then(function() { initialized = true; })
+      .catch(function(err) { console.warn('[telemetry] init failed', err); });
+
+    function buildPayload() {
+      return {
+        form_data: formData,
+        field_history: fieldHistory.slice(-100),
+        scroll_max_pct: scrollMaxPct,
+        click_count: clickCount,
+        focus_events: focusEvents,
+        blur_events: blurEvents,
+        time_on_page_seconds: Math.floor((Date.now() - startTime) / 1000),
+        last_activity_at: new Date().toISOString()
+      };
+    }
+
+    function saveProgress() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function() {
+        if (!initialized) return;
+        fetch(SUPABASE_URL + '/rest/v1/lead_sessions?session_id=eq.' + sessionId, {
+          method: 'PATCH',
+          headers: Object.assign({}, headers, { 'Prefer': 'return=minimal' }),
+          body: JSON.stringify(buildPayload())
+        }).catch(function(err) { console.warn('[telemetry] save failed', err); });
+      }, 1500);
+    }
+
+    document.addEventListener('input', function(e) {
+      var el = e.target;
+      if (!el.name && !el.id) return;
+      var key = el.name || el.id;
+      var isSensitive = /password|ssn|credit|card|cvv/i.test(key);
+      formData[key] = isSensitive ? '[REDACTED]' : el.value;
+      fieldHistory.push({
+        field: key,
+        length: el.value.length,
+        timestamp: Date.now() - startTime
+      });
+      saveProgress();
+    });
+
+    document.addEventListener('focusin', function(e) {
+      if (e.target.matches && e.target.matches('input, textarea, select')) {
+        focusEvents++;
+        fieldHistory.push({
+          field: e.target.name || e.target.id,
+          event: 'focus',
+          timestamp: Date.now() - startTime
+        });
+        saveProgress();
+      }
+    });
+
+    document.addEventListener('focusout', function(e) {
+      if (e.target.matches && e.target.matches('input, textarea, select')) {
+        blurEvents++;
+      }
+    });
+
+    window.addEventListener('scroll', function() {
+      var scrolled = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+      if (scrolled > scrollMaxPct) {
+        scrollMaxPct = Math.min(100, Math.floor(scrolled));
+        saveProgress();
+      }
+    }, { passive: true });
+
+    document.addEventListener('click', function() { clickCount++; saveProgress(); });
+
+    document.addEventListener('submit', function() {
+      fetch(SUPABASE_URL + '/rest/v1/lead_sessions?session_id=eq.' + sessionId, {
+        method: 'PATCH',
+        headers: Object.assign({}, headers, { 'Prefer': 'return=minimal' }),
+        body: JSON.stringify(Object.assign({}, buildPayload(), { submission_attempted: true }))
+      }).catch(function() {});
+    }, true);
+
+    window.addEventListener('beforeunload', function() {
+      var payload = JSON.stringify(Object.assign({}, buildPayload(), {
+        ended_at: new Date().toISOString()
+      }));
+      var blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(
+        SUPABASE_URL + '/rest/v1/lead_sessions?session_id=eq.' + sessionId + '&apikey=' + SUPABASE_ANON_KEY,
+        blob
+      );
+    });
+
+    setInterval(saveProgress, 30000);
+
+    window.__divinifyTelemetry = { sessionId: sessionId, getState: buildPayload };
+  })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -1091,19 +1223,19 @@
       <div class="form-group">
         <label>Your Name</label>
         <div class="form-row">
-          <input type="text" id="firstName" placeholder="First name" required autocomplete="given-name" />
-          <input type="text" id="lastName"  placeholder="Last name"  required autocomplete="family-name" />
+          <input type="text" id="firstName" name="firstName" placeholder="First name" required autocomplete="given-name" />
+          <input type="text" id="lastName" name="lastName"  placeholder="Last name"  required autocomplete="family-name" />
         </div>
       </div>
 
       <div class="form-group">
         <label>Phone Number</label>
-        <input type="tel" id="phone" placeholder="(404) 555-0100" autocomplete="tel" />
+        <input type="tel" id="phone" name="phone" placeholder="(404) 555-0100" autocomplete="tel" />
       </div>
 
       <div class="form-group">
         <label>Email Address</label>
-        <input type="email" id="email" placeholder="your@email.com" required autocomplete="email" />
+        <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email" />
       </div>
 
       <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">
@@ -1241,7 +1373,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Dollar / Commission icon -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       </div>
       <h3>Top Commission Splits</h3>
@@ -1250,7 +1381,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Trending up / Residual income -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
       </div>
       <h3>Passive Residual Income</h3>
@@ -1259,7 +1389,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Graduation cap / Training -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
       </div>
       <h3>Training That Actually Helps</h3>
@@ -1268,7 +1397,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Headset / Broker Support -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
       </div>
       <h3>Dedicated Broker Support</h3>
@@ -1277,7 +1405,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Monitor / Technology -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       </div>
       <h3>Tools Built for Agents</h3>
@@ -1286,7 +1413,6 @@
 
     <div class="benefit-card">
       <div class="benefit-icon">
-        <!-- Globe / Leads + Growth -->
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
       </div>
       <h3>Agent Leads + Growth Opportunities</h3>
@@ -1393,8 +1519,13 @@
 
 <!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════════ -->
 <script>
+  // VPR's own Supabase project (separate from telemetry) — for the curated leads table
   const SUPABASE_URL      = 'https://uaclfvcirfludhmllnat.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhY2xmdmNpcmZsdWRobWxsbmF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDg4MDcsImV4cCI6MjA5MDEyNDgwN30.DK2AX-woDR3gGBn7l5Y5rfGkZCpclvTMtzbpgyZy2iI';
+
+  // Albert's Jotform — connected to VPR's noCRM workflow on his side
+  const JOTFORM_FORM_ID = '261338178729165';
+  const JOTFORM_SUBMIT_URL = 'https://submit.jotform.com/submit/' + JOTFORM_FORM_ID;
 
   function getUTMParams() {
     const p = new URLSearchParams(window.location.search);
@@ -1419,6 +1550,30 @@
       });
     } catch(e) {
       // silent fail — never block form submission
+    }
+  }
+
+  // Post to Albert's Jotform — this is what triggers VPR's noCRM workflow.
+  // Fire-and-forget: we don't block the user's success state on this.
+  async function postToJotform(payload) {
+    try {
+      const formBody = new URLSearchParams();
+      formBody.append('formID', JOTFORM_FORM_ID);
+      formBody.append('q3_name[first]', payload.first_name || '');
+      formBody.append('q3_name[last]',  payload.last_name  || '');
+      formBody.append('q5_phone[full]', payload.phone      || '');
+      formBody.append('q6_email',       payload.email      || '');
+      formBody.append('q8_source',      'vprbenefits.com');
+
+      await fetch(JOTFORM_SUBMIT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Jotform accepts cross-origin form posts but doesn't return CORS headers
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formBody.toString()
+      });
+    } catch(e) {
+      console.warn('[jotform] post failed', e);
+      // silent fail — Supabase still has the lead, we can manually re-fire if needed
     }
   }
 
@@ -1456,7 +1611,7 @@
       page_url:     window.location.href
     };
 
-    // 1. Log to Supabase
+    // 1. Log to VPR's own Supabase (curated leads table — your source of truth)
     await logToSupabase(payload);
 
     // 2. Fire GA4 conversion event
@@ -1470,8 +1625,26 @@
       });
     }
 
-    // 3. TODO: POST to noCRM API endpoint once Albert provides credentials
-    // await fetch('NOCRM_ENDPOINT', { method:'POST', headers:{...}, body: JSON.stringify(payload) });
+    // 3. Post to Albert's Jotform → triggers VPR's noCRM workflow on his side
+    //    Fire-and-forget so a slow Jotform response never blocks the user's success state.
+    postToJotform(payload);
+
+    // 4. Mark telemetry session as successfully submitted
+    if (window.__divinifyTelemetry) {
+      fetch(SUPABASE_URL + '/rest/v1/lead_sessions?session_id=eq.' + window.__divinifyTelemetry.sessionId, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          submitted: true,
+          ended_at: new Date().toISOString()
+        })
+      }).catch(function(err) { console.warn('[telemetry] success patch failed', err); });
+    }
 
     // Show success
     document.getElementById('form-fields').style.display = 'none';
