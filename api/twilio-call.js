@@ -1,14 +1,15 @@
-// Twilio incoming-call webhook
-// Logs the call to Supabase vpr_calls, then forwards to the destination number.
+// Twilio webhook handler — handles both incoming calls AND status callbacks
+// Initial call: logs to Supabase + returns TwiML to forward
+// Status callback: updates the row with duration, final status, ended_at
 
 export const config = {
   api: {
-    bodyParser: false  // we'll parse Twilio's form-encoded body ourselves
+    bodyParser: false
   }
 };
 
 export default async function handler(req, res) {
-  // Manually read and parse Twilio's application/x-www-form-urlencoded body
+  // Parse Twilio's form-encoded body
   let body = {};
   try {
     const chunks = [];
@@ -19,10 +20,53 @@ export default async function handler(req, res) {
     console.error('[twilio-call] body parse failed', e);
   }
 
-  console.log('[twilio-call] body keys:', Object.keys(body));
-  console.log('[twilio-call] CallSid:', body.CallSid);
-
   const callSid = body.CallSid;
+  const callStatus = body.CallStatus;
+  const callDuration = body.CallDuration; // only present on status callbacks
+  const isStatusCallback = !!callDuration || ['completed', 'busy', 'no-answer', 'failed', 'canceled'].includes(callStatus);
+
+  console.log('[twilio-call] event:', isStatusCallback ? 'STATUS_CALLBACK' : 'INITIAL_CALL', 'sid:', callSid, 'status:', callStatus);
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const forwardTo = process.env.CALL_FORWARD_TO;
+
+  // ── STATUS CALLBACK: update existing row with final call details ──
+  if (isStatusCallback) {
+    if (callSid && supabaseUrl && supabaseServiceKey) {
+      try {
+        const updateRes = await fetch(
+          `${supabaseUrl}/rest/v1/vpr_calls?call_sid=eq.${callSid}`,
+          {
+            method: 'PATCH',
+            headers: {
+              'apikey': supabaseServiceKey,
+              'Authorization': `Bearer ${supabaseServiceKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              status: callStatus,
+              duration_seconds: callDuration ? parseInt(callDuration, 10) : null,
+              ended_at: new Date().toISOString()
+            })
+          }
+        );
+        console.log('[twilio-call] status update:', updateRes.status);
+        if (!updateRes.ok) {
+          const errText = await updateRes.text();
+          console.error('[twilio-call] status update error:', errText);
+        }
+      } catch (err) {
+        console.error('[twilio-call] status update threw:', err);
+      }
+    }
+    // Status callbacks don't need a TwiML response, just a 200 OK
+    res.status(200).send('OK');
+    return;
+  }
+
+  // ── INITIAL CALL: log new row + return TwiML to forward ──
   const fromNumber = body.From;
   const toNumber = body.To;
   const fromCity = body.FromCity || null;
@@ -31,17 +75,6 @@ export default async function handler(req, res) {
   const fromCountry = body.FromCountry || null;
   const fromCallerName = body.CallerName || null;
 
-  const forwardTo = process.env.CALL_FORWARD_TO;
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  console.log('[twilio-call] env check:', {
-    hasForwardTo: !!forwardTo,
-    hasSupabaseUrl: !!supabaseUrl,
-    hasServiceKey: !!supabaseServiceKey
-  });
-
-  // Log the call to Supabase. Awaited so we can see errors in logs.
   if (callSid && supabaseUrl && supabaseServiceKey) {
     try {
       const supaRes = await fetch(`${supabaseUrl}/rest/v1/vpr_calls`, {
@@ -66,19 +99,16 @@ export default async function handler(req, res) {
           raw_payload: body
         })
       });
-      console.log('[twilio-call] supabase status:', supaRes.status);
+      console.log('[twilio-call] insert status:', supaRes.status);
       if (!supaRes.ok) {
         const errText = await supaRes.text();
-        console.error('[twilio-call] supabase error body:', errText);
+        console.error('[twilio-call] insert error:', errText);
       }
     } catch (err) {
-      console.error('[twilio-call] supabase fetch threw:', err);
+      console.error('[twilio-call] insert threw:', err);
     }
-  } else {
-    console.error('[twilio-call] skipped supabase write: missing values');
   }
 
-  // Respond to Twilio with TwiML that forwards the call.
   res.setHeader('Content-Type', 'text/xml');
   res.status(200).send(
     `<?xml version="1.0" encoding="UTF-8"?>
