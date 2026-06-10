@@ -14,6 +14,21 @@
     gtag('config', 'G-CLL1GRV876');
   </script>
 
+  <!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2573696956419059');
+fbq('track', 'PageView');
+</script>
+<!-- End Meta Pixel -->
+
   <!-- Divinify Telemetry — captures session even if main pipeline fails -->
   <script>
   (function() {
@@ -1616,7 +1631,7 @@
 
     // 2. Fire GA4 conversion event
     if (typeof gtag !== 'undefined') {
-      gtag('event', 'form_submission', {
+      gtag('event', 'form_submission', { 
         event_category: 'lead',
         event_label:    'vpr_email_campaign',
         first_name:     firstName,
@@ -1624,6 +1639,9 @@
         utm_campaign:   utm.utm_campaign
       });
     }
+    
+    // 2b. Fire Meta Pixel conversion
+      if (window.fbq) fbq('track', 'Lead');
 
     // 3. Post to Albert's Jotform → triggers VPR's noCRM workflow on his side
     //    Fire-and-forget so a slow Jotform response never blocks the user's success state.
