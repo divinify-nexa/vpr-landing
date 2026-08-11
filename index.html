@@ -1732,10 +1732,6 @@ fbq('track', 'PageView');
   const SUPABASE_URL      = 'https://uaclfvcirfludhmllnat.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhY2xmdmNpcmZsdWRobWxsbmF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDg4MDcsImV4cCI6MjA5MDEyNDgwN30.DK2AX-woDR3gGBn7l5Y5rfGkZCpclvTMtzbpgyZy2iI';
 
-  // Albert's Jotform — connected to VPR's noCRM workflow on his side
-  const JOTFORM_FORM_ID = '261338178729165';
-  const JOTFORM_SUBMIT_URL = 'https://submit.jotform.com/submit/' + JOTFORM_FORM_ID;
-
   function getUTMParams() {
     const p = new URLSearchParams(window.location.search);
     return {
@@ -1759,30 +1755,6 @@ fbq('track', 'PageView');
       });
     } catch(e) {
       // silent fail — never block form submission
-    }
-  }
-
-  // Post to Albert's Jotform — this is what triggers VPR's noCRM workflow.
-  // Fire-and-forget: we don't block the user's success state on this.
-  async function postToJotform(payload) {
-    try {
-      const formBody = new URLSearchParams();
-      formBody.append('formID', JOTFORM_FORM_ID);
-      formBody.append('q3_name[first]', payload.first_name || '');
-      formBody.append('q3_name[last]',  payload.last_name  || '');
-      formBody.append('q5_phone[full]', payload.phone      || '');
-      formBody.append('q6_email',       payload.email      || '');
-      formBody.append('q8_source',      'vprbenefits.com');
-
-      await fetch(JOTFORM_SUBMIT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Jotform accepts cross-origin form posts but doesn't return CORS headers
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formBody.toString()
-      });
-    } catch(e) {
-      console.warn('[jotform] post failed', e);
-      // silent fail — Supabase still has the lead, we can manually re-fire if needed
     }
   }
 
@@ -1813,7 +1785,7 @@ fbq('track', 'PageView');
       last_name:    lastName,
       email:        email,
       phone:        phone,
-      source:       'email_campaign',
+      source:       window.location.hostname,
       utm_source:   utm.utm_source,
       utm_medium:   utm.utm_medium,
       utm_campaign: utm.utm_campaign,
@@ -1837,9 +1809,8 @@ fbq('track', 'PageView');
     // 2b. Fire Meta Pixel conversion
       if (window.fbq) fbq('track', 'Lead');
 
-    // 3. Post to Albert's Jotform → triggers VPR's noCRM workflow on his side
-    //    Fire-and-forget so a slow Jotform response never blocks the user's success state.
-    postToJotform(payload);
+    // 3. GHL delivery: handled server-side — the Supabase INSERT above fires the
+    //    vpr_leads_to_ghl webhook → ghl-relay Edge Function → GHL recruiting pipeline.
 
     // 4. Mark telemetry session as successfully submitted
     if (window.__divinifyTelemetry) {
